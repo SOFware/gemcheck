@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/gemcheck"
+
+formatter = Gemcheck::Csv.new
+formatter.format(`bundle outdated`)
+
+filename = ARGV[0] || "outdated_gems.csv"
+
+if formatter.empty?
+  puts "Yay! There's no outdated gems"
+else
+  puts "Writing gems to #{filename}"
+  File.open(filename, 'w') do |file|
+    file.puts formatter.convert
+  end
+end
